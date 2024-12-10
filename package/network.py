@@ -1,7 +1,9 @@
-from typing import List
+from typing import List, Tuple, Dict
 from dataclasses import dataclass
 import pandas as pd
 from pathlib import Path
+import sys
+import heapq
 
 """
 network.py deals with the graph theory for Ticket 2 Ride
@@ -11,19 +13,36 @@ Contains 33 cities (nodes) and _ routes (edges)
 @dataclass
 class Route:
     city1: str
-    distnace: int
+    distance: int
     color: str
     city2: str
 
 class Network():
     def __init__(self):
         self.nodes: List[str] = []
-        self.routes: List[Route] = []
+        self.edges: List[Route] = []
         self.location: str = 'USA'
+        self.graph: Dict[str, Dict[str, int]] = {}
 
     def make_board(self) -> None:
         if self.location == 'USA':
             self.make_board_usa()
+        
+        self.graph = self.build_graph()
+
+    def build_graph(self) -> Dict[str, Dict[str, int]]:
+        graph = {}
+        for edge in self.edges:
+            # Unpack edge
+            C1, distance, _, C2 = edge.city1, edge.distance, edge.color, edge.city2
+            if C1 not in graph:
+                graph[C1] = {}
+            if C2 not in graph:
+                graph[C2] = {}
+            graph[C1][C2] = distance
+            graph[C2][C1] = distance
+        return graph
+
 
     def make_board_usa(self) -> None:
         self.nodes = [
@@ -35,9 +54,9 @@ class Network():
             'Washington','Winnipeg'
         ]
 
-        self.routes = self.get_routes_usa()
+        self.edges = self.get_edges_usa()
 
-    def get_routes_usa(self) -> List[Route]:
+    def get_edges_usa(self) -> List[Route]:
         route_list: List[Route] = []
 
         # Setting up file pathing
@@ -51,3 +70,28 @@ class Network():
             route_list.append(cur_route)
 
         return route_list
+
+    def get_shortest_path(self, C1: str, C2: str, score: int) -> Tuple[List[str], int]:
+        shortest_path, path_length = self.dijkstras(C1, C2)
+        return shortest_path, path_length
+
+    def dijkstras(self, start, end):
+        queue = [(0, start, [])]
+        visited = set()
+
+        while queue:
+            cost, cur_city, path = heapq.heappop(queue)
+            if cur_city in visited:
+                continue
+
+            path = path + [cur_city]
+            visited.add(cur_city)
+
+            if cur_city == end:
+                return cost, path
+
+            for neighbor, weight in self.graph[cur_city].items():
+                if neighbor not in visited:
+                    heapq.heappush(queue, (cost + weight, neighbor, path))
+
+        return "Error, no path available"
