@@ -17,6 +17,17 @@ class Route:
     color: str
     city2: str
 
+"""
+NODES represent cities
+EDGES represent direct paths between two cities that do no pass through any other cities
+LOCATION is just the version of the game being player (only set up for USA currently)
+GRAPH is a dictionary that represent all of the possible paths
+the keys are each of the 30 cities where each value is another key value pair
+the nested key value pairs represent each city that the first city is connected to, along with the distance
+the graph does not include the color of the route but this can be grabbed with the get_color method
+this data struct is useful for implementing dijkstra's
+
+"""
 class Network():
     def __init__(self):
         self.nodes: List[str] = []
