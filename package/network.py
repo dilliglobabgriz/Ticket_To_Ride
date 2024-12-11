@@ -95,3 +95,27 @@ class Network():
                     heapq.heappush(queue, (cost + weight, neighbor, path))
 
         return "Error, no path available"
+    
+    """
+    get_color takes two cities as parameters and return the color of the track connecting them
+    If the two cities do not have a direct connection (without having to go through other cities),
+    this function will return 'NA', otherwise it will return the color as a string
+    """
+    def get_color(self, C1: str, C2: str) -> str:
+        if C1 in self.graph.keys() and C2 in self.graph[C1].keys():
+            # Find the Route object between C1 and C2 and return the Route.color
+            return self.find_route_by_cities(C1, C2).color
+        return 'NA'
+    
+    # Same as get color but returns distance as int or INF (sys.maxsize)
+    def get_distance(self, C1: str, C2: str) -> int:
+        if C1 in self.graph.keys() and C2 in self.graph[C1].keys():
+            return self.graph[C1][C2]
+        return sys.maxsize
+
+    # Return an empty route if route does not exist
+    def find_route_by_cities(self, C1: str, C2: str) -> Route:
+        for route in self.edges:
+            if (C1 == route.city1 and C2 == route.city2) or (C1 == route.city2 and C2 == route.city1):
+                return route
+        return Route('', 0, '', '')
