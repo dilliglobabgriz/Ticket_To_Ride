@@ -1,4 +1,4 @@
-from package.util import Destination_Deck
+from src.util import Destination_Deck
 import pytest
 
 def test_dest_deck_creation():

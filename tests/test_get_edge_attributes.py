@@ -1,5 +1,5 @@
 import pytest
-from package.network import Network
+from src.network import Network
 
 def test_get_color():
     n = Network()
