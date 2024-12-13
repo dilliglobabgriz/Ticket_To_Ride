@@ -19,7 +19,7 @@ def test_deck():
     print(d.deck)
 
 def main():
-    test_deck()
+    test_dijk()
 
 if __name__ == '__main__':
     main()
