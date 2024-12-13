@@ -4,7 +4,7 @@ import pandas as pd
 from pathlib import Path
 import sys
 import heapq
-from algorithms import GraphAlgorithms
+#from algorithms import GraphAlgorithms
 
 """
 network.py deals with the graph theory for Ticket 2 Ride
@@ -84,8 +84,7 @@ class Network():
         return route_list
 
     def get_shortest_path(self, C1: str, C2: str, score: int) -> Tuple[List[str], int]:
-        GA = GraphAlgorithms()
-        shortest_path, path_length = GA.dijkstras(C1, C2, self.graph)
+        shortest_path, path_length = self.dijkstras(C1, C2)
         return shortest_path, path_length
 
     def dijkstras(self, start, end):
@@ -101,7 +100,7 @@ class Network():
             visited.add(cur_city)
 
             if cur_city == end:
-                return cost, path
+                return path, cost
 
             for neighbor, weight in self.graph[cur_city].items():
                 if neighbor not in visited:

@@ -12,7 +12,7 @@ def test_dijk():
     net.make_board()
     print(net.get_shortest_path('New York', 'Los Angeles', 20))
     print(net.get_shortest_path('Vancouver', 'Miami', 21))
-    print(net.edges)
+    #print(net.edges)
 
 def test_deck():
     d = Destination_Deck()
