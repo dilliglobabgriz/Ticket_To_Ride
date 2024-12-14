@@ -33,6 +33,7 @@ class Network():
     def __init__(self):
         self.nodes: List[str] = []
         self.edges: List[Route] = []
+        self.edges_no_color: List[List[str, str, int]]
         self.location: str = 'USA'
         self.graph: Dict[str, Dict[str, int]] = {}
 
@@ -67,6 +68,19 @@ class Network():
         ]
 
         self.edges = self.get_edges_usa()
+        self.edges_no_color = self.get_edges_no_color()
+
+    def get_edges_no_color(self):
+        nc_edges = []
+        seen = set()
+
+        for edge in self.edges:
+            nc_edge = tuple(sorted([edge.city1, edge.city2]) + [edge.distance])
+            if nc_edge not in seen:
+                seen.add(nc_edge)
+                nc_edges.append([edge.city1, edge.city2, edge.distance])
+
+        return nc_edges
 
     def get_edges_usa(self) -> List[Route]:
         route_list: List[Route] = []

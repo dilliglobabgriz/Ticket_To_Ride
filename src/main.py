@@ -7,6 +7,11 @@ def test_network():
     print(net.routes)
     print(len(net.routes))
 
+def see_edges():
+    net = Network()
+    net.make_board()
+    print(net.graph)
+
 def test_dijk():
     net = Network()
     net.make_board()
